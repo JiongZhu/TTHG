@@ -1,0 +1,7 @@
+[
+{"field":"id","title":"ID"},
+{"field":"brandNo","title":"配件品牌编号","align":"center"},
+{"field":"brandName","title":"配件品牌名","align":"center"}
+]
+
+

@@ -1,0 +1,15 @@
+[
+{"field":"id","title":"年份","align":"center","width":"150","formatter":""},
+{"field":"januarynum","title":"一月(单位:辆)","align":"center","width":"150","formatter":""},
+{"field":"februarynum","title":"二月(单位:辆)","align":"center","width":"150","formatter":""},
+{"field":"marchnum","title":"三月(单位:辆)","align":"center","width":"150","formatter":""},
+{"field":"aprilnum","title":"四月(单位:辆)","align":"center","width":"150","formatter":""},
+{"field":"maynum","title":"五月(单位:辆)","align":"center","width":"150","formatter":""},
+{"field":"junenum","title":"六月(单位:辆)","align":"center","width":"150","formatter":""},
+{"field":"julynum","title":"七月(单位:辆)","align":"center","width":"150","formatter":""},
+{"field":"augustnum","title":"八月(单位:辆)","align":"center","width":"150","formatter":""},
+{"field":"septembernum","title":"九月(单位:辆)","align":"center","width":"150","formatter":""},
+{"field":"octobernum","title":"十月(单位:辆)","align":"center","width":"150","formatter":""},
+{"field":"novembernum","title":"十一月(单位:辆)","align":"center","width":"150","formatter":""},
+{"field":"decembernum","title":"十二月(单位:辆)","align":"center","width":"150","formatter":""}
+]

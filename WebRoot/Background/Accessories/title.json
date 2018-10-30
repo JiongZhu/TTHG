@@ -1,0 +1,11 @@
+[
+{"field":"id","title":"ID"},
+{"field":"acceNo","title":"配件编号","align":"center"},
+{"field":"acceName","title":"配件品牌名称","align":"center"},
+{"field":"accessoriesType","title":"配件类型","align":"center"},
+{"field":"carArea","title":"车辆生产地","align":"center"},
+{"field":"carStyle","title":"车辆类型","align":"center"},
+{"field":"producTime","title":"生产时间","align":"center"},
+{"field":"price","title":"价格","align":"center"},
+{"field":"photo","title":"详细信息","align":"center"}
+]

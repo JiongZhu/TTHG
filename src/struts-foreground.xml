@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="true"/>
+	<package name="wuyushuang" namespace="/" extends="struts-default">
+	   <action name="tthg" class="com.tthg.controller.LoginAction">
+          <result name="success">loginhome.jsp</result>
+          <result name="input">index.jsp</result>
+          <result name="error">error.jsp</result>
+       </action>
+
+        <action name="order" class="com.tthg.controller.OrderAction">
+            <result name="tsuccess">order.jsp</result>
+            <result name="success">index.jsp</result>
+
+        </action>
+        <action name="selectaction" class="com.tthg.controller.SelectAction">
+            <result name="success">show.jsp</result>
+            <result name="showtype">showtype.jsp</result>
+            <result name="notype">notype.jsp</result>
+            <result name="showdetail">showdetail.jsp</result>
+            <result name="success2">showbrand.jsp</result>
+            <result name="success3">showselect.jsp</result>
+            
+        </action>
+	</package>
+</struts>    

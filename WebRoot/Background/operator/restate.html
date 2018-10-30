@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>维修状态</title>
+<link rel="stylesheet" type="text/css" href="../css/default.css">
+<link rel="stylesheet" type="text/css" href="../js/jquery-easyui-1.3.5/themes/gray/easyui.css">
+<link rel="stylesheet" type="text/css" href="../js/jquery-easyui-1.3.5/themes/icon.css" />
+<script type="text/javascript" src="../js/jquery-easyui-1.3.5/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../js/jquery-easyui-1.3.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/extends.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/jquery-easyui-1.3.5/locale/easyui-lang-zh_CN.js"></script>
+<script>
+ var url;
+$(function(){
+resetValue();
+	function formtNo(rowIndex, rowData){
+		return '<span style="color:red;">'+rowData.troNo+'</span>';
+	}
+	function formtEx(rowIndex, rowData){
+		if(rowData.execution==1){
+			return '<span style="color:red;">100%</span>';
+		}else{
+			return '<span style="color:red;">0</span>';
+		}
+	}
+	$("#tt").datagrid({
+		height:$("#body").height()-$('#search_area').height()-5,
+		width:$("#body").width(),
+		idField:'id',
+		//data: data,
+		url:"../restateAction",  
+		singleSelect:false,
+		selectOnCheck:true,
+        checkOnSelect:true,
+		nowrap:true,
+		pageSize:5,
+		fitColumns:true,
+		rownumbers:true,
+		showPageList:false,
+		collapsible:true,//显示可折叠按钮
+		frozenColumns: [[{field:'ck',checkbox:true}]],
+		striped:true,
+		columns:[[
+			{field:'id',title:'Id',width:100,halign:"center", align:"left"},
+			{field:'proNo',title:'项目编号',width:100,halign:"center", align:"left"},
+			{field:'plateNo',title:'车辆编号',width:100,halign:"center", align:"left"},
+			{field:'execution',title:'完成度',formatter:formtEx,width:100,halign:"center", align:"left"},
+			{field:'troId',title:'故障编号',width:100,halign:"center", align:"left",hidden:true},
+			{field:'troNo',title:'故障编号',formatter:formtNo,width:100,halign:"center", align:"left"}
+			]],
+		toolbar:'#tt_btn',  
+        rownumbers:true,
+        pagination:true,//分页
+		onDblClickRow:function(rowIndex, rowData){
+			viewDetail(rowData.id);
+		}
+
+	});
+	
+	$("#dlg").dialog({
+		collapsible:true,
+		minimizable:true,
+		maximizable:true,
+		resizable:true,
+		width:350,
+		height:300,
+		cache:false,
+		buttons:"#dlg-buttons",
+		inline:false,
+		closed:true,
+		shadow:false,
+		model:true,
+		onMinimize:function(){
+			$("#dlg").dialog('move',{left:"52%",top:"90%"}).dialog('collapse').dialog('open');
+		}
+	});
+});
+	//表单数据转json数据格式
+	$.fn.serializeObject = function() {
+			var o = {};
+			var a = this.serializeArray();
+			$.each(a, function() {
+				if (o[this.name]) {
+					if (!o[this.name].push) {
+						o[this.name] = [ o[this.name] ];
+					}
+					o[this.name].push(this.value || '');
+				} else {
+					o[this.name] = this.value || '';
+				}
+			});
+			return JSON.stringify(o);
+	}
+	//查询部门
+    function searchRestate() {
+        $("#tt").datagrid('options').url="../restateAction!preSelect";
+		$("#tt").datagrid('load',{
+			"restate.troNo":$("#troNo").val(),
+			"restate.execution":$("#execution").combobox('getValue'),
+		});
+    }
+  
+  	//提交窗口
+    function openRestateAddDialog() { 
+       var selectedRows = $("#tt").datagrid("getSelections");
+		if (selectedRows.length == 0) {
+			$.messager.alert("系统提示", "请选择要提交的数据！");
+			return;
+		}
+		var customerIds = [];
+		for ( var i = 0; i < selectedRows.length; i++) {
+			customerIds.push(selectedRows[i].id);
+		}
+		var ids = customerIds.join(",");
+		$.messager.confirm("系统提示", "您确定要提交这 <font color=red>"
+				+ selectedRows.length + "</font> 条数据吗？", function(r) {
+			if (r) {
+		$.ajax({
+			type : "POST",
+			dataType : "json",
+			url : "../restateAction!preStr",
+			data : "ids="+ids,
+			success : function(data) {
+			if(data.success){
+				$.messager.alert("系统提示", "提交成功！");
+			}else{
+				$.messager.alert("系统提示", "提交失败！");
+			}
+			},
+			error:function(data) {
+				$.messager.alert("系统提示", "提交失败，请联系系统管理员！");
+			}
+		});
+			}
+		});
+
+    }
+	//打开修改状态窗口
+    function openRestateModifyDialog() { 
+        url = "../restateAction!preUpdateRs";
+        var selectedRows = $("#tt").datagrid("getSelections");
+        if (selectedRows.length != 1) {
+            $.messager.alert("系统提示", "请选择一条要编辑的数据！");
+            return;
+        }
+        var row = selectedRows[0];
+        $("#dlg").dialog("open").dialog("setTitle", "编辑员工信息");
+        resetValue();
+        $("#fm").form("load", row);
+
+    }
+	//保存状态   
+    function saveRestate() {
+       $.ajax({
+		type : "POST",
+		dataType : "json",
+		url : url,
+		data : "str="+$("#fm").serializeObject(),
+		success : function(data) {
+			$.messager.alert("系统提示", "保存成功！");
+			resetValue();
+			$("#dlg").dialog("close");
+			$("#tt").datagrid("reload");
+		},
+		error : function(data) {
+			$.messager.alert("系统提示", "保存失败！");
+		}
+       });
+    }
+	//清空值
+    function resetValue() {
+    	$(".easyui-validatebox").val("");
+    	$(".easyui-combobox").combo("setValue","").combo("setText","");  
+
+       }
+	//关闭窗口
+    function closeRestateDialog() {
+     	resetValue();	
+        $("#dlg").dialog("close");
+        $("body").datagrid("clearSelections"); 
+    }
+	//删除状态
+    function deleteRestate() {
+        var selectedRows = $("#tt").datagrid("getSelections");
+		if (selectedRows.length == 0) {
+			$.messager.alert("系统提示", "请选择要删除的数据！");
+			return;
+		}
+		var customerIds = [];
+		for ( var i = 0; i < selectedRows.length; i++) {
+			customerIds.push(selectedRows[i].id);
+		}
+		var ids = customerIds.join(",");
+		$.messager.confirm("系统提示", "您确定要删除这 <font color=red>"
+				+ selectedRows.length + "</font> 条数据吗？", function(r) {
+			if (r) {
+		$.ajax({
+			type : "POST",
+			dataType : "json",
+			url : "../restateAction!preRemoveRs",
+			data : "ids="+ids,
+			success : function(data) {
+				$.messager.alert("系统提示", "数据已成功删除！");
+				$("#tt").datagrid('reload');
+				$("#tt").datagrid('clearSelections'); 
+			},
+			failure:function(data) {
+				$.messager.alert("系统提示", "数据删除失败，请联系系统管理员！");
+			}
+	});
+			}
+		});
+    }
+	function viewDetail(date, id){
+		$parent.messager.alert("提示","查询详细", "info");
+	};
+	
+	//监听窗口大小变化
+	window.onresize = function(){
+		setTimeout(domresize,300);
+	};
+	//改变表格宽高
+	function domresize(){
+		$('#tt').datagrid('resize',{  
+			height:$("#body").height()-$('#search_area').height()-5,
+			width:$("#body").width()
+		});
+	}
+</script>
+</head>
+<body class="easyui-layout" >
+<div id="body" region="center" > 
+  <!-- 查询条件区域 -->
+  <div id="search_area" >
+    <div id="conditon">
+      <table border="0">
+        <tr>
+          <td>完成度：</td>
+          <td><input id="execution" name="execution" panelHeight="100" class="easyui-combobox" data-options="valueField:'value',textField:'text',data:[{'value':1,'text':'100%'},{'value':0,'text':'0'}]"/></td>
+          <td>故障编号：</td>
+          <td><input name="troNo" id="troNo" class="easyui-validatebox"/></td>
+          <td>
+              <a  href="javascript:searchRestate()" class="easyui-linkbutton my-search-button" iconCls="icon-search" plain="true">查询</a> 
+              <a  href="javascript:resetValue()" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <span id="openOrClose">111</span> 
+  </div>
+  <!-- 数据表格区域 -->
+  <table id="tt" style="table-layout:fixed;" ></table>
+  <!-- 表格顶部工具按钮 -->
+  <div id="tt_btn">
+  	  <a href="javascript:openRestateAddDialog()"  id="save" class="easyui-linkbutton" iconCls="icon-add" plain="true">提交</a>
+      <a href="javascript:openRestateModifyDialog()"  id="update" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
+      <a href="javascript:deleteRestate()"  id="delete" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+   </div>
+   <!-- 添加用户信息及修改用户信息 弹出框 -->
+     <div id="dlg" class="easyui-dialog" closed="true">
+      <form method="post" id="fm">
+      <table cellspacing="8px;" id="ta1">
+      <tr id="tr1">
+      <td>ID：</td>
+      <td><input type="text" name="id" id="id" class="easyui-validatebox" required="true" readOnly="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>项目编号：</td>
+      <td><input type="text" name="proNo" id="proNo" class="easyui-validatebox" required="true" />
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>车辆编号：</td>
+      <td><input type="text" name="plateNo" id="plateNo" class="easyui-validatebox" required="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>完成度：</td>
+      <td><input id="execution" name="execution" panelHeight="100" class="easyui-combobox" data-options="valueField:'value',textField:'text',data:[{'value':1,'text':'100%'},{'value':0,'text':'0'}]"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>故障编号：</td>
+      <td><input type="text" name="troNo" id="troNo" class="easyui-validatebox" required="true" />
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      </table>
+     </form>
+     </div>
+        
+	<div id="dlg-buttons">
+           <a href="javascript:saveRestate()" class="easyui-linkbutton"iconCls="icon-ok">保存</a> 
+           <a href="javascript:closeRestateDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+	</div>
+</div>
+</body>
+</html>

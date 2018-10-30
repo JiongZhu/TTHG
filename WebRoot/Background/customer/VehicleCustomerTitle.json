@@ -1,0 +1,16 @@
+[
+{"field":"id","title":"ID","align":"center","width":"50"},
+{"field":"customerNo","title":"客户编号","align":"center","width":"58"},
+{"field":"customerName","title":"客户姓名","align":"center","width":"61"},
+{"field":"sex","title":"性别","align":"center","width":"60"},
+{"field":"age","title":"年龄","align":"center","width":"60"},
+{"field":"telephone","title":"联系电话","align":"center","width":"100"},
+{"field":"address","title":"地址","align":"center","width":"60"},
+{"field":"pc","title":"邮编","align":"center","width":"60"},
+{"field":"email","title":"邮箱","align":"center","width":"120"},
+{"field":"hobby","title":"兴趣","align":"center","width":"70"},
+{"field":"cardId","title":"身份证号","align":"center","width":"136"},
+{"field":"driverLicense","title":"驾驶证号","align":"center","width":"136"},
+{"field":"carId","title":"车辆编号","align":"center","width":"58"},
+{"field":"consultantName","title":"销售顾问","align":"center","width":"60"}
+]

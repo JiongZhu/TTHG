@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+	<table name="tb_customer_intention" catalog="db_tthg"
+		class="com.tthg.entity.IntentionCustomer">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+		<column name="CustomerNo"></column>
+		<column name="CustomerName"></column>
+		<column name="Sex"></column>
+		<column name="Age"></column>
+		<column name="Telephone"></column>
+		<column name="Address"></column>
+		<column name="P.C." property="PC" type="java.lang.String"></column>
+		<column name="E-MAIL" property="EMAIL"
+			type="java.lang.String">
+		</column>
+		<column name="Hobby"></column>
+		<column name="CardID"></column>
+		<column name="DriverLicense"></column>
+		<column name="Payment"></column>
+		<column name="CarStyle"></column>
+		<column name="Attention"></column>
+		<column name="OtherRequirements"></column>
+		<column name="Negotiation"></column>
+		<column name="Result"></column>
+		<column name="ConsultantName"></column>
+		<column name="PC"></column>
+		<column name="EMAIL"></column>
+		<column name="CarStyleID"></column>
+	</table>
+	<table name="tb_customer_vehicle" catalog="db_tthg"
+		class="com.tthg.entity.VehicleCustomer">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+		<column name="CustomerNo"></column>
+		<column name="CarID"></column>
+		<column name="ConsultantName"></column>
+	</table>
+	<table name="tb_reception" catalog="db_tthg"
+		class="com.tthg.entity.Reception">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+		<column name="CarStyleID"></column>
+	</table>
+	<table name="tb_appointment" catalog="db_tthg"
+		class="com.tthg.entity.Appointment">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+		<column name="CarStyleID"></column>
+		<column name="IntentionID"></column>
+	</table>
+	<table name="tb_callback" catalog="db_tthg"
+		class="com.tthg.entity.Callback">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+	</table>
+	<table name="tb_contract" catalog="db_tthg"
+		class="com.tthg.entity.Contract">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+	</table>
+	<table name="tb_vehicle" catalog="db_tthg"
+		class="com.tthg.entity.Vehicle">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+		<column name="GuidePrice(RMB)" property="guidePrice"
+			type="java.lang.Double">
+		</column>
+		<column name="Length*width*height(mm)" property="lwh"
+			type="java.lang.String">
+		</column>
+		<column name="MaxSpeed(km/h)" property="maxSpeed"
+			type="java.lang.Double">
+		</column>
+		<column name="Displacement(L)" property="displacement"
+			type="java.lang.Double">
+		</column>
+	</table>
+	<table name="tb_objection" catalog="db_tthg"
+		class="com.tthg.entity.Objection">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+	</table>
+	<table name="tb_order" catalog="db_tthg"
+		class="com.tthg.entity.Order">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+	</table>
+	<table name="tb_purchase_invoice" catalog="db_tthg"
+		class="com.tthg.entity.Invoice">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+	</table>
+	<table name="tb_subscription" catalog="db_tthg"
+		class="com.tthg.entity.Subscription">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+	</table>
+	<table name="tb_tree" catalog="db_tthg"
+		class="com.tthg.entity.Tree">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+		<column name="open" property="open" type="java.lang.Boolean"></column>
+	</table>
+</hibernate-reverse-engineering>

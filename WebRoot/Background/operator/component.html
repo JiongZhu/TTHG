@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>零件调用</title>
+<link rel="stylesheet" type="text/css" href="../css/default.css">
+<link rel="stylesheet" type="text/css" href="../js/jquery-easyui-1.3.5/themes/gray/easyui.css">
+<link rel="stylesheet" type="text/css" href="../js/jquery-easyui-1.3.5/themes/icon.css" />
+<script type="text/javascript" src="../js/jquery-easyui-1.3.5/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../js/jquery-easyui-1.3.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/extends.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/jquery-easyui-1.3.5/locale/easyui-lang-zh_CN.js"></script>
+<script>
+ var url;
+$(function(){
+
+	function formtNo(rowIndex, rowData){
+			return '<span style="color:red;">'+rowData.troNo+'</span>';
+	}
+	$("#tt").datagrid({
+		height:$("#body").height()-$('#search_area').height()-5,
+		width:$("#body").width(),
+		idField:'id',
+		//data: data,
+		url:"../componentAction",  
+		singleSelect:false,
+		selectOnCheck:true,
+        checkOnSelect:true,
+		nowrap:true,
+		pageSize:5,
+		fitColumns:true,
+		rownumbers:true,
+		showPageList:false,
+		collapsible:true,//显示可折叠按钮
+		frozenColumns: [[{field:'ck',checkbox:true}]],
+		striped:true,
+		columns:[[
+			{field:'id',title:'Id',width:100,halign:"center", align:"left"},
+			{field:'compNo',title:'零件编号',width:100,halign:"center", align:"left"},
+			{field:'compName',title:'零件名',width:100,halign:"center", align:"left"},
+			{field:'modelNum',title:'规格',width:100,halign:"center", align:"left"},
+			{field:'cdate',title:'调用时间',width:100,halign:"center", align:"left"},
+			{field:'cnum',title:'数量',width:100,halign:"center", align:"left"},
+			{field:'unitPri',title:'单价',width:100,halign:"center", align:"left"},
+			{field:'brokerage',title:'经手人',width:100,halign:"center", align:"left"},
+			{field:'uname',title:'调用人', width:100,halign:"center", align:"left"},
+			{field:'troId',title:'故障编号',width:100,halign:"center", align:"left",hidden:true},
+			{field:'troNo',title:'故障编号',formatter:formtNo,width:100,halign:"center", align:"left"}
+			]],
+		toolbar:'#tt_btn',  
+        rownumbers:true,
+        pagination:true,//分页
+		onDblClickRow:function(rowIndex, rowData){
+			viewDetail(rowData.id);
+		}
+
+	});
+	$("#dlg").dialog({
+		collapsible:true,
+		minimizable:true,
+		maximizable:true,
+		resizable:true,
+		width:350,
+		height:400,
+		cache:false,
+		buttons:"#dlg-buttons",
+		inline:false,
+		closed:true,
+		shadow:false,
+		model:true,
+		onMinimize:function(){
+			$("#dlg").dialog('move',{left:"52%",top:"90%"}).dialog('collapse').dialog('open');
+		}
+	});
+});
+	//表单数据转json数据格式
+	$.fn.serializeObject = function() {
+			var o = {};
+			var a = this.serializeArray();
+			$.each(a, function() {
+				if (o[this.name]) {
+					if (!o[this.name].push) {
+						o[this.name] = [ o[this.name] ];
+					}
+					o[this.name].push(this.value || '');
+				} else {
+					o[this.name] = this.value || '';
+				}
+			});
+			return JSON.stringify(o);
+	}
+	//查询零件
+    function searchComponent() {
+        $("#tt").datagrid('options').url="../componentAction!preSelect";
+		$("#tt").datagrid('load',{
+			"component.troNo":$("#troNo").val(),
+			"component.uname":$("#admiDivisionCode").combobox('getValue'),
+		});
+    }
+  
+	//打开修改部门窗口
+    function openComponentModifyDialog() { 
+    	var oTr1=document.getElementById("tr1");
+    	
+	    if(null==oTr1){	
+    		$("#ta1").prepend('<tr id="tr1"><td>ID：</td><td><input type="text" name="id" id="id" class="easyui-validatebox" required="true" readOnly="true"/>&nbsp;<span style="color: red">*</span></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>');
+       		resetValue();
+       	}
+       	
+       	queryXzqh1(); 
+       	queryXzqh2();
+        var selectedRows = $("#tt").datagrid("getSelections");
+        if (selectedRows.length != 1) {
+            $.messager.alert("系统提示", "请选择一条要编辑的数据！");
+            return;
+        }
+        var row = selectedRows[0];
+        $("#dlg").dialog("open").dialog("setTitle", "编辑零件信息");
+        resetValue();
+        $("#fm").form("load", row);
+        url = "../componentAction!preUpdateCo";
+    }
+	//保存部门   
+    function saveComponent() {
+       $.ajax({
+		type : "POST",
+		dataType : "json",
+		url : url,
+		data : "str="+$("#fm").serializeObject(),
+		success : function(data) {
+			$.messager.alert("系统提示", "保存成功！");
+			resetValue();
+			$("#dlg").dialog("close");
+			$("#tt").datagrid("reload");
+		},
+		error : function(data) {
+			$.messager.alert("系统提示", "保存失败！");
+		}
+       });
+    }
+	//清空值
+    function resetValue() {
+    	$(".easyui-validatebox").val("");
+    	$(".easyui-combobox").combo("setValue","").combo("setText","");  
+
+       }
+	//关闭窗口
+    function closeComponentDialog() {
+     	resetValue();	
+        $("#dlg").dialog("close");
+        $("body").datagrid("clearSelections"); 
+    }
+	//删除部门
+    function deleteComponent() {
+        var selectedRows = $("#tt").datagrid("getSelections");
+		if (selectedRows.length == 0) {
+			$.messager.alert("系统提示", "请选择要删除的数据！");
+			return;
+		}
+		var customerIds = [];
+		for ( var i = 0; i < selectedRows.length; i++) {
+			customerIds.push(selectedRows[i].id);
+		}
+		var ids = customerIds.join(",");
+		$.messager.confirm("系统提示", "您确定要删除这 <font color=red>"
+				+ selectedRows.length + "</font> 条数据吗？", function(r) {
+			if (r) {
+		$.ajax({
+			type : "POST",
+			dataType : "json",
+			url : "../componentAction!preRemoveCo",
+			data : "ids="+ids,
+			success : function(data) {
+				$.messager.alert("系统提示", "数据已成功删除！");
+				$("#tt").datagrid('reload');
+				$("#tt").datagrid('clearSelections'); 
+			},
+			failure:function(data) {
+				$.messager.alert("系统提示", "数据删除失败，请联系系统管理员！");
+			}
+	});
+			}
+		});
+    }
+	function viewDetail(date, id){
+		$parent.messager.alert("提示","查询详细", "info");
+	};
+	
+	//监听窗口大小变化
+	window.onresize = function(){
+		setTimeout(domresize,300);
+	};
+	//改变表格宽高
+	function domresize(){
+		$('#tt').datagrid('resize',{  
+			height:$("#body").height()-$('#search_area').height()-5,
+			width:$("#body").width()
+		});
+	}
+	function queryXzqh1(){  
+	 $.ajax({  
+	    type:"post",  
+	    async:true,
+	    url:"../repairAction!preUser",//获取数据  
+	    dataType:"json",  
+	    success: function(data){//调用成功  
+	    var options=$("#admiDivisionCode1").combobox('options');  
+	    options.textField="dename";//必须要和数据库查询的字段一样(大小写敏感)  
+	    options.valueField="uname";  
+		//加载数据  
+		$("#admiDivisionCode1").combobox("loadData",data);  
+		    },  
+		 });
+	 }
+	 
+	 $(document).ready(function(){  
+	     queryXzqh(); 
+	     $("#tt").datagrid("reload");  
+	  });
+	function queryXzqh(){  
+	 $.ajax({  
+	    type:"post",  
+	    async:true,
+	    url:"../repairAction!preUser",//获取数据  
+	    dataType:"json",  
+	    success: function(data){//调用成功  
+	    var options=$("#admiDivisionCode").combobox('options');  
+	    options.textField="dename";//必须要和数据库查询的字段一样(大小写敏感)  
+	    options.valueField="uname";  
+		//加载数据  
+		$("#admiDivisionCode").combobox("loadData",data);  
+		    },  
+		 });
+	 }
+	 function queryXzqh2(){  
+	 $.ajax({  
+	    type:"post",  
+	    async:true,
+	    url:"../repairAction!preUser",//获取数据  
+	    dataType:"json",  
+	    success: function(data){//调用成功  
+	    var options=$("#admiDivisionCode2").combobox('options');  
+	    options.textField="dename";//必须要和数据库查询的字段一样(大小写敏感)  
+	    options.valueField="uname";  
+		//加载数据  
+		$("#admiDivisionCode2").combobox("loadData",data);  
+		    },  
+		 });
+	 }
+</script>
+</head>
+<body class="easyui-layout" >
+<div id="body" region="center" > 
+  <!-- 查询条件区域 -->
+  <div id="search_area" >
+    <div id="conditon">
+      <table border="0">
+        <tr>
+          <td>故障编号：</td>
+          <td><input  name="troNo" id="troNo" class="easyui-validatebox"/></td>
+          <td>调用人：</td>
+          <td><input id="admiDivisionCode" name="uname" panelHeight="100" class="easyui-combobox" style="width:150px" data-options="required:false" /></td>
+          <td>
+              <a  href="javascript:searchComponent()" class="easyui-linkbutton my-search-button" iconCls="icon-search" plain="true">查询</a> 
+              <a  href="javascript:resetValue()" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <span id="openOrClose">111</span> 
+  </div>
+  <!-- 数据表格区域 -->
+  <table id="tt" style="table-layout:fixed;" ></table>
+  <!-- 表格顶部工具按钮 -->
+  <div id="tt_btn">
+      <a href="javascript:openComponentModifyDialog()"  id="update" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
+      <a href="javascript:deleteComponent()"  id="delete" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+   </div>
+   <!-- 添加用户信息及修改用户信息 弹出框 -->
+     <div id="dlg" class="easyui-dialog" closed="true">
+      <form method="post" id="fm">
+      <table cellspacing="8px;" id="ta1">
+      <tr id="tr1">
+      <td>ID：</td>
+      <td><input type="text" name="id" id="id" class="easyui-validatebox" required="true" readOnly="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>零件编号：</td>
+      <td><input type="text" name="compNo" id="compNo" class="easyui-validatebox" required="true" />
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>零件名：</td>
+      <td><input type="text" name="compName" id="compName" class="easyui-validatebox" required="true" />
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>规格：</td>
+      <td><input type="text" id="modelNum" name="modelNum" class="easyui-validatebox" required="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>调用时间：</td>
+      <td><input type="text" name="cdate" id="cdate" class="easyui-datetimebox" required="true" />
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>零件数量：</td>
+      <td><input type="text" name="cnum" id="cnum" class="easyui-validatebox" required="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>单价：</td>
+      <td><input id="unitPri" name="unitPri" class="easyui-validatebox" required="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>负责人：</td>
+      <td><input id="admiDivisionCode2" name="brokerage" panelHeight="100" class="easyui-combobox" style="width:150px" data-options="required:true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>调用人：</td>
+      <td><input id="admiDivisionCode1" name="uname" panelHeight="100" class="easyui-combobox" style="width:150px" data-options="required:true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>故障编号：</td>
+      <td><input id="troNo" name="troNo" class="easyui-validatebox" required="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      </table>
+     </form>
+     </div>
+        
+	<div id="dlg-buttons">
+           <a href="javascript:saveComponent()" class="easyui-linkbutton"iconCls="icon-ok">保存</a> 
+           <a href="javascript:closeComponentDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+	</div>
+</div>
+</body>
+</html>

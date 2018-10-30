@@ -1,0 +1,14 @@
+[
+{"field":"id","title":"ID"},
+{"field":"subscriptionNo","title":"协议编号"},
+{"field":"customerName","title":"客户姓名"},
+{"field":"sex","title":"性别"},
+{"field":"age","title":"年龄"},
+{"field":"cardId","title":"身份证号"},
+{"field":"address","title":"地址"},
+{"field":"telephone","title":"联系电话"},
+{"field":"pc","title":"邮编"},
+{"field":"email","title":"邮箱"},
+{"field":"cname","title":"意向车型"},
+{"field":"subTime","title":"签订日期"}
+]

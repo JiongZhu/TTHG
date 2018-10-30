@@ -1,0 +1,11 @@
+[
+{"field":"id","title":"ID","align":"center","width":"85"},
+{"field":"orderNo","title":"订单编号","align":"center","width":"105"},
+{"field":"customerName","title":"客户姓名","align":"center","width":"102"},
+{"field":"cardId","title":"身份证号","align":"center","width":"192"},
+{"field":"telephone","title":"联系电话","align":"center","width":"146"},
+{"field":"carId","title":"车辆编号","align":"center","width":"121"},
+{"field":"sid","title":"订购协议编号","align":"center","width":"90"},
+{"field":"orTime","title":"签订日期","align":"center","width":"142"},
+{"field":"state","title":"审核状态","align":"center","width":"110"}
+]

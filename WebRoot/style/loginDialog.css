@@ -1,0 +1,237 @@
+﻿@charset "utf-8";
+.mask{margin:0;padding:0;border:none;width:100%;height:100%;background:#333;opacity:0.6;filter:alpha(opacity=60);z-index:9999;position:fixed;top:0;left:0;display:none;}
+#LoginBox{position:absolute;left:460px;top:150px;background:white;width:426px;height:282px;border:3px solid #444;border-radius:7px;z-index:10000;display:none;}
+.row1{background:#E1E1E1;padding:0px 20px;line-height:50px;height:50px;font-weight:bold;color:#666;font-size:20px;}
+.close_btn{font-family:arial;font-size:30px;font-weight:700;color:#999;text-decoration:none;float:right;padding-right:4px;}
+
+.login-top {
+  background: #E1E1E1;
+  border-radius: 25px 25px 0px 0px;
+  -webkit-border-radius:  25px 25px 0px 0px;
+  -moz-border-radius: 25px 25px 0px 0px;
+  -o-border-radius: 25px 25px 0px 0px;
+  padding: 40px 60px;
+}
+.login-top h1 {
+  text-align: center;
+  font-size: 27px;
+  font-weight: 500;
+  color: #DE5491;
+  margin: 0px 0px 20px 0px;
+}
+.login-top input[type="text"] {
+	outline: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #818181;
+  padding: 15px 20px;
+  background: #CACACA;
+  border: 1px solid #ccc;
+  border-radius:25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -o-border-radius: 25px;
+  margin: 0px 0px 12px 0px;
+  width: 88%;
+  -webkit-appearance: none;
+}
+.login-top input[type="password"]{
+	outline: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #818181;
+  padding: 15px 20px;
+  background: #CACACA;
+  border: 1px solid #ccc;
+  border-radius:25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -o-border-radius: 25px;
+  margin: 0px 0px 12px 0px;
+  width: 88%;
+  -webkit-appearance: none;
+}
+.forgot  a{
+  font-size: 13px;
+  font-weight: 500;
+  color: #DE5491;
+  display: inline-block;
+  border-right: 2px solid #DE5491;
+  padding: 0px 7px 0px 0px;
+}
+.forgot  a:hover{
+  color: #818181;
+}
+.forgot input[type="submit"] {
+  background: #DE5491;
+  color: #FFF;
+  font-size: 17px;
+  font-weight: 400;
+  padding: 8px 7px;
+  width: 20%;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 6px;
+  -webkit-border-radius: 19px;
+  -moz-border-radius: 6px;
+  -o-border-radius: 6px;
+  margin: 0px 7px 0px 3px;
+  outline: none;
+  border: none;
+}
+.forgot input[type="submit"]:hover {
+	background:#818181;
+	transition: 0.5s all;
+  -webkit-transition: 0.5s all;
+  -moz-transition: 0.5s all;
+  -o-transition: 0.5s all;
+}
+.forgot {
+  text-align: right;
+}
+.login-bottom {
+  background: #DE5491;
+  padding: 30px 65px;
+  border-radius: 0px 0px 25px 25px;
+  -webkit-border-radius:  0px 0px 25px 25px;
+  -moz-border-radius: 0px 0px 25px 25px;
+  -o-border-radius: 0px 0px 25px 25px;
+  text-align: right;
+  border-top: 2px solid #AD4337;
+}
+.login-bottom h3 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+.login-bottom h3 a {
+  font-size: 25px;
+  font-weight: 500;
+  color: #fff;
+}
+.login-bottom h3 a:hover {
+	color:#696969;
+	transition: 0.5s all;
+  -webkit-transition: 0.5s all;
+  -moz-transition: 0.5s all;
+  -o-transition: 0.5s all;
+}
+
+/*--login end here--*/
+/*--meadia quiries start here--*/
+@media(max-width:1440px){
+#LoginBox {
+  width: 35%;
+}
+}
+@media(max-width:1366px){
+#LoginBox{
+  width: 37%;
+}
+}
+@media(max-width:1280px){
+#LoginBox {
+  width: 40%;
+}
+}
+@media(max-width:1024px){
+#LoginBox {
+  width: 48%;
+}
+
+}
+@media(max-width:768px){
+#LoginBox {
+  width: 65%;
+}
+.login-top h1 {
+  font-size: 25px;
+}
+.login-bottom h3 a {
+  font-size: 22px;
+}
+
+
+#LoginBox h2 {
+  font-size: 28px;
+}
+}
+@media(max-width:640px){
+.login-top h1 {
+  font-size: 23px;
+}
+.forgot input[type="submit"] {
+  font-size: 15px;
+  width: 22%;
+}
+.login-top input[type="text"] {
+  padding: 12px 20px;
+}
+.login-top input[type="password"] {
+  padding: 12px 20px;
+}
+.login-bottom h3 a {
+  font-size: 19px;
+}
+.login-bottom h3 {
+  font-size: 13px;
+}
+
+}
+@media(max-width:480px){
+#LoginBox {
+  width: 80%;
+}
+.login-top h1 {
+  font-size: 21px;
+}
+.login-top input[type="text"] {
+  width: 85%;
+}
+.login-top {
+  padding: 30px 40px;
+}
+.login-top input[type="password"] {
+  width: 85%;
+}
+
+}
+@media(max-width:320px){
+#LoginBox {
+  width: 90%;
+}
+.login-top {
+  padding: 20px 25px;
+}
+.login-top input[type="text"] {
+  width: 81%;
+  padding: 10px 20px;
+  font-size: 13px;
+  margin: 0px 0px 7px 0px;
+}
+.login-top input[type="password"] {
+  width: 81%;
+  padding: 10px 20px;
+  font-size: 13px;
+  margin: 0px 0px 7px 0px;
+}
+.forgot input[type="submit"] {
+  font-size: 11px;
+  width: 25%;
+  padding: 6px 7px;
+}
+.forgot  a {
+  font-size: 11px;
+}
+.login-bottom {
+  padding: 20px 25px;
+}
+.login-bottom h3 {
+  font-size: 11px;
+}
+.login-bottom h3 a {
+  font-size: 17px;
+}
+
+}
+/*--meadia quiries end here--*/

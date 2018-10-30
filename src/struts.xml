@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<include file="struts-foreground.xml"></include>
+	<constant name="struts.enable.DynamicMethodInvocation" value="true"/>
+	<package name="default" namespace="/Background" extends="json-default">
+<!-- 朱宣羽  -->
+<!-- 后台登录 -->
+		<action name="BackgroundLoginAction" class="backgroundLoginAction">
+			<result name="success" type="json">
+				<param name="root">jsonObj</param>
+			</result>
+			<result name="input">/Background/login.jsp</result>
+		</action>
+		<action name="validateCodeAction" class="validateCodeAction">
+			<result name="success" type="stream">
+				<param name="contentType">image/jpeg</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>
+<!-- 动态获取treeNodes -->
+		<action name="TreeLoadAction" class="treeLoadAction">
+			<result type="json">
+				<param name="root">treeNodes</param>
+			</result>
+		</action>
+<!-- 意向客户管理 -->
+		<action name="IntentionCustomerAction" class="intentionCustomerAction">
+			<result name="success" type="json">
+				<param name="root">jsonObj</param>
+			</result>
+			<result name="input" type="json">
+				<param name="root">jsonArr</param>
+			</result>
+		</action>
+<!-- 意向客户流失分析 -->
+		<action name="IntentionCustomerEchartAction" class="intentionCustomerEchartAction">
+			<result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+<!-- 购车客户管理 -->
+		<action name="VehicleCustomerAction" class="vehicleCustomerAction">
+			<result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+<!-- 展厅接待管理 -->
+		<action name="ReceptionAction" class="receptionAction">
+			<result name="success" type="json">
+				<param name="root">jsonObj</param>
+			</result>
+			<result name="input" type="json">
+				<param name="root">jsonArr</param>
+			</result>
+		</action>
+<!-- 试乘试驾预约 -->
+		<action name="AppointmentAction" class="appointmentAction">
+			<result name="success" type="json">
+				<param name="root">jsonObj</param>
+			</result>
+			<result name="input" type="json">
+				<param name="root">jsonArr</param>
+			</result>
+		</action>
+<!-- 订购协议 -->
+		<action name="SubscriptionAction" class="subscriptionAction">
+			<result name="success" type="json">
+				<param name="root">jsonObj</param>
+			</result>
+			<result name="input" type="json">
+				<param name="root">jsonArr</param>
+			</result>
+		</action>
+<!-- 订单管理 -->
+		<action name="BackgroundOrderAction" class="backgroundOrderAction">
+			<result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+<!-- 合同管理 -->
+		<action name="ContractAction" class="contractAction">
+			<result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+<!-- 发票管理 -->
+		<action name="InvoiceAction" class="invoiceAction">
+			<result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+<!-- 客户回访 -->
+		<action name="CallbackAction" class="callbackAction">
+			<result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+<!-- 异议协调处理 -->
+		<action name="ObjectionAction" class="objectionAction">
+			<result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+
+<!--	葛康-->
+	<action name="departAction" class="departAction">  
+		<result type="json"> 
+			<param name="root">dmJson</param>
+		</result>
+ 	</action>
+ 	<action name="userAction" class="userAction">  
+		<result name="success" type="json"> 
+			<param name="root">usJson</param>
+		</result>
+		<result name="input" type="json"> 
+			<param name="root">usJsonA</param>
+		</result>
+ 	</action>
+ 	<action name="repairAction" class="repairAction">  
+		<result name="success" type="json"> 
+			<param name="root">reJson</param>
+		</result>
+		<result name="input" type="json"> 
+			<param name="root">reJsonA</param>
+		</result>
+ 	</action>
+ 	<action name="engstateAction" class="engstateAction">  
+		<result name="success" type="json"> 
+			<param name="root">enJson</param>
+		</result>
+		<result name="input" type="json"> 
+			<param name="root">enJsonA</param>
+		</result>
+ 	</action>
+ 	<action name="evaluateAction" class="evaluateAction">  
+		<result name="success" type="json"> 
+			<param name="root">evJson</param>
+		</result>
+		<result name="input" type="json"> 
+			<param name="root">evJsonA</param>
+		</result>
+ 	</action>
+ 	<action name="paymentAction" class="paymentAction">  
+		<result name="success" type="json"> 
+			<param name="root">payJson</param>
+		</result>
+		<result name="input" type="json"> 
+			<param name="root">payJsonA</param>
+		</result>
+ 	</action>
+ 	<action name="troubleAction" class="troubleAction">  
+		<result name="success" type="json"> 
+			<param name="root">troJson</param>
+		</result>
+		<result name="input" type="json"> 
+			<param name="root">troJsonA</param>
+		</result>
+ 	</action>
+ 	<action name="restateAction" class="restateAction">  
+		<result name="success" type="json"> 
+			<param name="root">resJson</param>
+		</result>
+		<result name="input" type="json"> 
+			<param name="root">resJsonA</param>
+		</result>
+ 	</action>
+ 	<action name="componentAction" class="componentAction">  
+		<result type="json"> 
+			<param name="root">compJson</param>
+		</result>
+		<result name="input" type="json"> 
+			<param name="root">compJsonA</param>
+		</result>
+ 	</action>
+<!-- 	王可-->
+ 	
+ 	<action name="VendorAction" class="vendorAction">
+			<result type="json">
+				<param name="root">jsonObj</param>
+			</result>		
+		</action>
+		<action name="AccessoriesAction" class="accessoriesAction">
+		<result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+	  	<action name="AccessoriesBrandAction" class="accessoriesBrandAction">
+		<result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+		<action name="VehicleAction" class="vehicleAction">
+		<result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+		<action name="VehicleBrandAction" class="vehicleBrandAction">
+            <result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+		<action name="CarAction" class="carAction">
+		 <result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+		<action name="VehiclemangerAction" class="vehiclemangerAction">
+		 <result type="json">
+				<param name="root">jsonObj</param>
+			</result>
+		</action>
+		<action name="EchartAction" class="echartAction">
+		<result type="json">
+			<param name="root">jsonObj</param>
+		</result>	
+		</action>
+		<action name="SalesnummangerAction" class="salesnummangerAction">
+		<result type="json">
+			<param name="root">jsonObj</param>
+		</result>	
+		</action>
+		<action name="RepairnummangerAction" class="repairnummangerAction">
+			<result type="json">
+			<param name="root">jsonObj</param>
+		</result>	
+		</action>
+		<action name="TurnovermangerAction" class="turnovermangerAction">
+			<result type="json">
+			<param name="root">jsonObj</param>
+		</result>	
+		</action>
+	</package>
+</struts>    

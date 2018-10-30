@@ -1,0 +1,5 @@
+[
+{"field":"id","title":"ID"},
+{"field":"carNo","title":"车辆编号","align":"center"},
+{"field":"vehicleId","title":"汽车ID","align":"center"}
+]

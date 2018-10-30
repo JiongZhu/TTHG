@@ -1,0 +1,11 @@
+[
+{"field":"id","title":"ID"},
+{"field":"vendorNo","title":"供应商编号","align":"center"},
+{"field":"vendorName","title":"供应商姓名","align":"center"},
+{"field":"address","title":"地址","align":"center"},
+{"field":"telephone","title":"电话","align":"center"},
+{"field":"reputation","title":"信誉","align":"center"},
+{"field":"websites","title":"网址","align":"center"},
+{"field":"headerName","title":"领导人名称","align":"center"},
+{"field":"headerSex","title":"领导人性别","align":"center"}
+]

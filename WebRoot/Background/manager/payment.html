@@ -1,0 +1,373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+<title>客户支付</title>
+<link rel="stylesheet" type="text/css" href="../css/default.css">
+<link rel="stylesheet" type="text/css" href="../js/jquery-easyui-1.3.5/themes/gray/easyui.css">
+<link rel="stylesheet" type="text/css" href="../js/jquery-easyui-1.3.5/themes/icon.css" />
+<script type="text/javascript" src="../js/jquery-easyui-1.3.5/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../js/jquery-easyui-1.3.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/extends.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/jquery-easyui-1.3.5/locale/easyui-lang-zh_CN.js"></script>
+<script>
+var url;
+$(function(){
+	function formtNo(rowIndex, rowData){
+			return '<span style="color:red;">'+rowData.reNo+'</span>';
+	}
+	function formtSt(rowIndex, rowData){
+	if(rowData.state==1){
+	return '<span style="color:red;">签字</span>';
+	}else{
+	return '<span style="color:red;">未签字</span>';
+	}
+	}
+	$("#tatle").click(function total(){
+		var a=$("#costPrice").val();
+		var b=$("#pfee").val();
+		var sum = (a-0)+(b-0); 
+		$("#tatle").val("");
+		$("#tatle").val(sum);
+	});
+	$("#tt").datagrid({
+		height:$("#body").height()-$('#search_area').height()-5,
+		width:$("#body").width(),
+		idField:'id',
+		//data: data,
+		url:"../paymentAction",  
+		singleSelect:false,
+		selectOnCheck:true,
+        checkOnSelect:true,
+		nowrap:true,
+		pageSize:2,
+		fitColumns:true,
+		rownumbers:true,
+		showPageList:false,
+		collapsible:true,//显示可折叠按钮
+		frozenColumns: [[{field:'ck',checkbox:true}]],
+		striped:true,
+		columns:[[
+			{field:'id',title:'Id',width:100,halign:"center", align:"left"},
+			{field:'manNo',title:'支付编号',width:100,halign:"center", align:"left"},
+			{field:'cname',title:'客户',width:100,halign:"center", align:"left"},
+			{field:'costPrice',title:'成本费',width:100,halign:"center", align:"left"},
+			{field:'pfee',title:'劳务费',width:100,halign:"center", align:"left"},
+			{field:'tatle',title:'总计',width:100,halign:"center", align:"left"},
+			{field:'pdate',title:'支付时间',width:100,halign:"center", align:"left"},
+			{field:'state',title:'签字',formatter:formtSt,width:100,halign:"center", align:"left"},
+			{field:'reId',title:'维修编号',width:100,halign:"center", align:"left",hidden:true},
+			{field:'reNo',title:'维修编号',formatter:formtNo,width:100,halign:"center", align:"left"}
+		]],
+		toolbar:'#tt_btn',  
+        rownumbers:true,
+        pagination:true,//分页
+		onDblClickRow:function(rowIndex, rowData){
+			viewDetail(rowData.id);
+		}
+	});
+	
+	$("#dlg").dialog({
+		collapsible:true,
+		minimizable:true,
+		maximizable:true,
+		resizable:true,
+		width:350,
+		height:350,
+		cache:false,
+		buttons:"#dlg-buttons",
+		inline:false,
+		closed:true,
+		shadow:false,
+		model:true,
+		onMinimize:function(){
+			$("#dlg").dialog('move',{left:"52%",top:"90%"}).dialog('collapse').dialog('open');
+		}
+	});
+	});
+
+	//表单数据转json数据格式
+	$.fn.serializeObject = function() {
+			var o = {};
+			var a = this.serializeArray();
+			$.each(a, function() {
+				if (o[this.name]) {
+					if (!o[this.name].push) {
+						o[this.name] = [ o[this.name] ];
+					}
+					o[this.name].push(this.value || '');
+				} else {
+					o[this.name] = this.value || '';
+				}
+			});
+			return JSON.stringify(o);
+	};
+	//查询部门
+    function searchPayment() {
+        $("#tt").datagrid('options').url="../paymentAction!preSelect";
+		$("#tt").datagrid('load',{
+			"payment.cname":$("#cname").val(),
+			"payment.reNo":$("#reNo").val(),
+			"payment.pdate":$("#pdate").datetimebox('getValue'),
+			"payment.edate":$("#edate").datetimebox('getValue')
+		});
+    }
+    //生成excel
+	function openPaymentAddDialog() {
+	 	var selectedRows = $("#tt").datagrid("getSelections");
+        if (selectedRows.length != 1) {
+            $.messager.alert("系统提示", "请选择一条要编辑的数据！");
+            return;
+        }
+        var row = selectedRows[0];
+		//获取Datagride的列  
+        var rows = row;  
+        var columns = $("#tt").datagrid("options").columns[0];  
+        var oXL = new ActiveXObject("Excel.Application"); //创建AX对象excel   
+        var oWB = oXL.Workbooks.Add(); //获取workbook对象   
+        var oSheet = oWB.ActiveSheet; //激活当前sheet  
+        //设置工作薄名称  
+        oSheet.name = "导出Excel报表";  
+        //设置表头  
+        for (var i = 0; i < 6; i++) {  
+            oSheet.Cells(1, i+1).value = columns[i].title;  
+        } 
+        //动态获取每一行每一列的数据值  
+        for (var j = 0; j < 6; j++) {                 
+            oSheet.Cells(2, j+1).value = selectedRows[0][columns[j].field];  
+        } 
+                             
+        oXL.Visible = true; //设置excel可见属性  
+}  
+	//打开修改支付窗口
+    function openPaymentModifyDialog() {
+       	resetValue();
+        var selectedRows = $("#tt").datagrid("getSelections");
+        if (selectedRows.length != 1) {
+            $.messager.alert("系统提示", "请选择一条要编辑的数据！");
+            return;
+        }
+        var row = selectedRows[0];
+        $("#dlg").dialog("open").dialog("setTitle", "编辑支付信息");
+        $("#fm").form("load", row);
+        url = "../paymentAction!preUpdatePa";
+    }
+	//保存支付信息   
+    function savePayment() {
+          $.ajax({
+			type : "POST",
+			dataType : "json",
+			url : url,
+			data : "str="+$("#fm").serializeObject(),
+			success : function(data) {
+				$.messager.alert("系统提示", "操作成功！");
+				resetValue();
+				$("#dlg").dialog("close");
+				$("#tt").datagrid("reload");
+			},
+			error : function(data) {
+				$.messager.alert("系统提示", "操作失败！");
+			}
+        });
+    }
+	//清空值
+    function resetValue() {
+    	$(".easyui-validatebox").val("");
+    	$(".easyui-combobox").combo("setValue","").combo("setText","");
+    	$(".easyui-datetimebox").datetimebox('setValue', '');  
+       }
+	//关闭窗口
+    function closePaymentDialog() {
+     	resetValue();
+     	
+        $("#dlg").dialog("close");
+        $("body").datagrid("clearSelections"); 
+       
+    }
+	//删除部门
+    function deletePayment() {
+        var selectedRows = $("#tt").datagrid("getSelections");
+		if (selectedRows.length == 0) {
+			$.messager.alert("系统提示", "请选择要删除的数据！");
+			return;
+		}
+		var customerIds = [];
+		for ( var i = 0; i < selectedRows.length; i++) {
+			customerIds.push(selectedRows[i].id);
+		}
+		var ids = customerIds.join(",");
+		$.messager.confirm("系统提示", "您确定要删除这 <font color=red>"
+				+ selectedRows.length + "</font> 条数据吗？", function(r) {
+		if (r) {
+		$.ajax({
+			type : "POST",
+			dataType : "json",
+			url : "../paymentAction!preRemovePa",
+			data : "ids="+ids,
+			success : function(data) {
+				$.messager.alert("系统提示", "数据已成功删除！");
+				$("#tt").datagrid('reload');
+				$("#tt").datagrid('clearSelections'); 
+			},
+			error:function(data) {
+				$.messager.alert("系统提示", "数据删除失败，请联系系统管理员！");
+			}
+			});
+		}
+		});
+    }
+function viewDetail(date, id){
+	$parent.messager.alert("提示","查询详细", "info");
+};
+
+//监听窗口大小变化
+window.onresize = function(){
+	setTimeout(domresize,300);
+};
+//改变表格宽高
+function domresize(){
+	$('#tt').datagrid('resize',{  
+		height:$("#body").height()-$('#search_area').height()-5,
+		width:$("#body").width()
+	});
+}
+//指定页面区域“单元格”内容导入Excel
+ function CellAreaExcel(tableid) 
+ {
+
+ var PrintA= document.getElementById(tableid); 
+ var oXL = new ActiveXObject("Excel.Application"); 
+ var oWB = oXL.Workbooks.Add(); 
+ var oSheet = oWB.ActiveSheet; 
+ var Lenr = PrintA.rows.length;
+ for (i=0;i<Lenr;i++) 
+ { 
+ var Lenc = PrintA.rows(i).cells.length; 
+ for (j=0;j<Lenc;j++) 
+ { 
+ oSheet.Cells(i+1,j+1).value = PrintA.rows(i).cells(j).innerText; 
+ } 
+ } 
+ oXL.Visible = true; 
+ }//指定页面区域“单元格”内容导入Excel
+ function CellAreaExcel(tableid) 
+ {
+ var PrintA= document.getElementById(tableid); 
+ var oXL = new ActiveXObject("Excel.Application"); 
+ var oWB = oXL.Workbooks.Add(); 
+ var oSheet = oWB.ActiveSheet; 
+ var Lenr = PrintA.rows.length;
+ for (i=0;i<Lenr;i++) 
+ { 
+ var Lenc = PrintA.rows(i).cells.length; 
+ for (j=0;j<Lenc;j++) 
+ { 
+ oSheet.Cells(i+1,j+1).value = PrintA.rows(i).cells(j).innerText; 
+ } 
+ } 
+ oXL.Visible = true; 
+ }
+</script>
+</head>
+<body class="easyui-layout" >
+<div id="body" region="center" > 
+  <!-- 查询条件区域 -->
+  <div id="search_area" >
+    <div id="conditon">
+      <table border="0">
+        <tr>
+          <td>客户名：</td>
+          <td ><input  name="cname" id="cname" class="easyui-validatebox"/></td>
+          <td>维修编号：</td>
+          <td ><input  name="reNo" id="reNo" class="easyui-validatebox"/></td>
+          <td>支付时间：</td>
+          <td ><input type="text" name="pdate" id="pdate" class="easyui-datetimebox" data-options="required:false" />
+          <td>-：</td>
+          <td ><input type="text" name="edate" id="edate" class="easyui-datetimebox" data-options="required:false"/>
+          <td>
+              <a  href="javascript:searchPayment()" class="easyui-linkbutton my-search-button" iconCls="icon-search" plain="true">查询</a> 
+              <a  href="javascript:resetValue()" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <span id="openOrClose">111</span> 
+  </div>
+  <!-- 数据表格区域 -->
+  <table id="tt" style="table-layout:fixed;" ></table>
+  <!-- 表格顶部工具按钮 -->
+  <div id="tt_btn">
+  	  <a href="javascript:openPaymentAddDialog()"  id="save" class="easyui-linkbutton" iconCls="icon-add" plain="true">生成</a>
+      <a href="javascript:openPaymentModifyDialog()"  id="update" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
+      <a href="javascript:deletePayment()"  id="delete" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+   </div>
+   <!-- 添加客户信息及修改客户信息 弹出框 -->
+     <div id="dlg" class="easyui-dialog" closed="true">
+      <form method="post" id="fm">
+      <table cellspacing="8px;" id="ta1">
+      <tr id="tr1">
+      <td>ID：</td>
+      <td><input type="text" name="id" id="id" class="easyui-validatebox" required="true" readOnly="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>支付编号：</td>
+      <td><input type="text" name="manNo" id="manNo" class="easyui-validatebox"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>客户：</td>
+      <td><input type="text" name="cname" id="cname" class="easyui-validatebox" required="true" />
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>成本费：</td>
+      <td><input type="text" name="costPrice" id="costPrice" class="easyui-validatebox" required="true" />
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>劳务费：</td>
+      <td><input id="pfee" name="pfee" class="easyui-validatebox" required="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>总计：</td>
+      <td><input type="text" name="tatle" id="tatle" class="easyui-validatebox" required="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>支付时间：</td>
+      <td><input type="text" name="pdate" id="pdate" class="easyui-datetimebox" required="true" />
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>签字：</td>
+      <td><input name="state" id="state" panelHeight="100" class="easyui-combobox" data-options="valueField:'value',textField:'text',data:[{'value':1,'text':'签字'},{'value':0,'text':'未签字'}]" required="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      <tr>
+      <td>维修编号：</td>
+      <td><input type="text" id="reNo" name="reNo" panelHeight="100" class="easyui-validatebox" required="true"/>
+      &nbsp;<span style="color: red">*</span></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      </tr>
+      </table>
+     </form>
+     </div>
+	<div id="dlg-buttons">
+           <a href="javascript:savePayment()" class="easyui-linkbutton"iconCls="icon-ok">保存</a> 
+           <a href="javascript:closePaymentDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+	</div>
+</div>
+</body>
+</html>

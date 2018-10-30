@@ -1,0 +1,6 @@
+[
+{"field":"id","title":"ID","align":"center","width":"150"},
+{"field":"contractNo","title":"合同编号","align":"center","width":"200"},
+{"field":"oid","title":"订单编号","align":"center","width":"200"},
+{"field":"contractTime","title":"签订日期","align":"center","width":"300"}
+]

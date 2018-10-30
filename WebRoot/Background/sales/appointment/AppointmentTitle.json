@@ -1,0 +1,13 @@
+[
+{"field":"id","title":"ID","align":"center","width":"55"},
+{"field":"appointmentNo","title":"预约编号","align":"center","width":"98"},
+{"field":"customerName","title":"客户姓名","align":"center","width":"98"},
+{"field":"telephone","title":"联系电话","align":"center","width":"124"},
+{"field":"cname","title":"意向车型","align":"center","width":"124"},
+{"field":"scheduledTime","title":"预约日期","align":"center","width":"114"},
+{"field":"scheduledPersonNum","title":"预约试驾人数","align":"center","width":"94"},
+{"field":"consultantName","title":"销售顾问","align":"center","width":"97"},
+{"field":"remarks","title":"备注","align":"center","width":"97"},
+{"field":"iid","title":"意向登记编号","align":"center","width":"94"},
+{"field":"state","title":"审核状态","align":"center","width":"96"}
+]

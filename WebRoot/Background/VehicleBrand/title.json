@@ -1,0 +1,7 @@
+[
+{"field":"id","title":"ID"},
+{"field":"brandNo","title":"汽车品牌编号","align":"center"},
+{"field":"brandName","title":"汽车品牌名称","align":"center"},
+{"field":"sign","title":"详细信息","align":"center"},
+]
+	

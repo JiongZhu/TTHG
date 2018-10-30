@@ -1,0 +1,10 @@
+[
+{"field":"id","title":"ID","align":"center","width":"85"},
+{"field":"callbackNo","title":"回访编号","align":"center","width":"100"},
+{"field":"customerName","title":"客户姓名","align":"center","width":"100"},
+{"field":"telephone","title":"联系电话","align":"center","width":"120"},
+{"field":"oid","title":"订单编号","align":"center","width":"100"},
+{"field":"callbackTime","title":"回访日期","align":"center","width":"140"},
+{"field":"evaluation","title":"评价","align":"center","width":"275"},
+{"field":"feedback","title":"反馈","align":"center","width":"174"}
+]
