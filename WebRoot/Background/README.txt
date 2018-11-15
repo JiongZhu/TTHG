@@ -1,10 +1,3 @@
-﻿关于作者：
-
-·英文名： eric
-·QQ：598091295
-·主页地址：www.solooo.net
-·博客园：www.cnblogs.com/solooo
-
 模板说明：
 
 ·主界面使用 easyui1.3.5
